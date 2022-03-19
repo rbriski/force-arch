@@ -1,13 +1,15 @@
+#/etc/systemd/system/force.service
 [Unit]
-Description=Gunicorn instance to serve Force project
+Description=Gunicorn instance to serve force ledger
 After=network.target
 
 [Service]
-User=sammy
+User=root
 Group=www-data
-WorkingDirectory=/home/sammy/myproject
-Environment="PATH=/home/sammy/myproject/myprojectenv/bin"
-ExecStart=/home/sammy/myproject/myprojectenv/bin/gunicorn --workers 3 --bind unix:myproject.sock -m 007 wsgi:app
+EnvironmentFile=/etc/environment
+WorkingDirectory=/root/force
+Environment="PATH=/root/force/bin"
+ExecStart=/root/force/bin/gunicorn --workers 3 --bind unix:force.sock -m 007 wsgi:app
 
 [Install]
 WantedBy=multi-user.target

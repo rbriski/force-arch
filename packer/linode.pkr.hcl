@@ -21,8 +21,31 @@ build {
     execute_command = "{{.Vars}} DEBIAN_FRONTEND='noninteractive' sudo -S -E '{{.Path}}'"
     script = "scripts/setup.sh"
   }
+    provisioner "file" {
+    source="scripts/force"
+    destination="/etc/nginx/sites-available/force"
+  }
+  provisioner "file" {
+    source="scripts/force.service"
+    destination="/etc/systemd/system/force.service"
+  }
+  provisioner "file" {
+    source="scripts/nginx.conf"
+    destination="/etc/nginx/nginx.conf"
+  }
+  provisioner "file" {
+    source="scripts/environment"
+    destination="/etc/environment"
+  }
   provisioner "shell" {
     script = "scripts/get_code.sh"
+  }
+  provisioner "shell" {
+    environment_vars = [
+      "EMAIL=${var.EMAIL}"
+    ]
+    execute_command = "{{.Vars}} DEBIAN_FRONTEND='noninteractive' sudo -S -E '{{.Path}}'"
+    script = "scripts/finish.sh"
   }
 }
 

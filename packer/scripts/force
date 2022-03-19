@@ -1,0 +1,9 @@
+#/etc/nginx/sites-available/force
+server {
+    server_name deanzaforce.club www.deanzaforce.club;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/root/force/force.sock;
+    }
+}

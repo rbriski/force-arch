@@ -14,8 +14,7 @@ provider "linode" {
 }
 
 data "linode_image" "force" {
-  # force-image-20220312012520
-  id = "private/15794916"
+  id = "private/15845193"
 }
 
 resource "linode_instance" "force" {
