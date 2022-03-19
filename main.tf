@@ -1,4 +1,6 @@
 variable "LINODE_API_TOKEN" {}
+variable "DNSIMPLE_TOKEN" {}
+variable "DNSIMPLE_ACCOUNT" {}
 
 terraform {
   required_providers {
@@ -6,11 +8,20 @@ terraform {
       source  = "linode/linode"
       version = ">= 1.26.0"
     }
+    dnsimple = {
+      source  = "dnsimple/dnsimple"
+      version = "0.11.1"
+    }
   }
 }
 
 provider "linode" {
   token = var.LINODE_API_TOKEN
+}
+
+provider "dnsimple" {
+  token   = var.DNSIMPLE_TOKEN
+  account = var.DNSIMPLE_ACCOUNT
 }
 
 data "linode_image" "force" {
@@ -64,6 +75,25 @@ resource "linode_firewall" "force" {
   linodes = [linode_instance.force.id]
 }
 
+resource "dnsimple_domain" "force" {
+  name = "deanzaforce.club"
+}
+
+resource "dnsimple_zone_record" "force_naked" {
+  zone_name = dnsimple_domain.force.name
+  name      = ""
+  value     = linode_instance.force.ip_address
+  type      = "A"
+  ttl       = 3600
+}
+
+resource "dnsimple_zone_record" "force_www" {
+  zone_name = dnsimple_domain.force.name
+  name      = "www"
+  value     = dnsimple_zone_record.force_naked.zone_name
+  type      = "CNAME"
+  ttl       = 3600
+}
 
 output "instance_ip_addr" {
   value = linode_instance.force.ip_address
