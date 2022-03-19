@@ -1,4 +1,5 @@
 variable "LINODE_API_TOKEN" {}
+variable "EMAIL" {}
 
 locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 

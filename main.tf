@@ -1,6 +1,7 @@
 variable "LINODE_API_TOKEN" {}
 variable "DNSIMPLE_TOKEN" {}
 variable "DNSIMPLE_ACCOUNT" {}
+variable "EMAIL" {}
 
 terraform {
   required_providers {
@@ -25,7 +26,7 @@ provider "dnsimple" {
 }
 
 data "linode_image" "force" {
-  id = "private/15845193"
+  id = "private/15845634"
 }
 
 resource "linode_instance" "force" {
